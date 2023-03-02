@@ -1,0 +1,77 @@
+<?php
+
+use Jet\Form_Field_Select;
+use Jet\MVC;
+use Jet\MVC_View;
+use Jet\Form;
+use Jet\Form_Renderer;
+use Jet\UI;
+use Jet\Locale;
+
+/**
+* @var MVC_View $this
+* @var Form $form
+*/
+
+$form = $this->getRaw( 'form' );
+
+$form->renderer()->setDefaultLabelWidth( [
+	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
+	Form_Renderer::LJ_SIZE_SMALL => 12,
+	Form_Renderer::LJ_SIZE_MEDIUM => 2,
+	Form_Renderer::LJ_SIZE_LARGE => 2
+] );
+
+$form->renderer()->setDefaultFieldWidth( [
+	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
+	Form_Renderer::LJ_SIZE_SMALL => 12,
+	Form_Renderer::LJ_SIZE_MEDIUM => 10,
+	Form_Renderer::LJ_SIZE_LARGE => 8
+] );
+
+/**
+ * @var Form_Field_Select $parent
+ */
+$parent = $form->field('parent_id');
+
+foreach( $parent->getSelectOptions() as $option ) {
+	/**
+	 * @var \Jet\Data_Tree_Node $option
+	 */
+	
+	$option->setSelectOptionCssClass( 'level-'.$option->getDepth() );
+}
+
+?>
+
+
+<?= $form->start(); ?>
+
+<div class="row toolbar" id="main-toolbar">
+	<div class="col-md-12">
+		<?= UI::button_goBack()->setUrl( MVC::getPage()->getURLPath() ) ?>
+		<?php if( !$form->getIsReadonly() ): ?>
+			<?= UI::button_save() ?>
+		<?php endif; ?>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-2">
+		<?php require 'tree.phtml'; ?>
+	</div>
+	<div class="col-md-10" id="main-col">
+
+		<?= $form->field( 'parent_id' ) ?>
+		<?= $form->field( 'internal_name' ) ?>
+		<?= $form->field( 'internal_notes' ) ?>
+		<?= $form->field( 'is_active' ) ?>
+		<?php foreach( $form->getSubFormPrefixes('/localized') as $locale => $prefix ):
+			$locale = new Locale( $locale ); ?>
+			<legend><?= UI::flag( $locale ) ?>&nbsp;<?= $locale->getName() ?></legend>
+			<?= $form->field( $prefix.'title' ) ?>
+			<?= $form->field( $prefix.'description' ) ?>
+		<?php endforeach; ?>
+	</div>
+</div>
+<?= $form->end(); ?>

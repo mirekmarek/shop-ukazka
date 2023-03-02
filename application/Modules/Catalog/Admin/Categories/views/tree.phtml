@@ -1,0 +1,44 @@
+<?php
+namespace JetApplicationModule\Catalog\Admin\Categories;
+
+use Jet\Data_Tree_Node;
+use Jet\MVC_View;
+use Jet\UI_tree;
+use JetApplication\Category;
+
+/**
+ * @var MVC_View $this;
+ * @var Controller_Main $controller
+ */
+
+$controller = $this->getController();
+$router = $controller->getControllerRouter();
+
+$category = $controller->getCategory();
+
+$tree = new UI_tree();
+
+$tree->setData( Category::getTree() );
+if($category) {
+	$tree->setSelectedId( $category->getId() );
+}
+
+$tree->setRendererNormal( function( Data_Tree_Node $node ) use ($router) : void {
+	?>
+	<a href="<?=$router->action('edit')->URI($node->getId())?>"><?=$node->getLabel()?></a>
+	<?php
+} );
+
+$tree->setRendererOpened( function( Data_Tree_Node $node ) use ($router) : void {
+	?>
+	<a href="<?=$router->action('edit')->URI($node->getId())?>"><i><?=$node->getLabel()?></i></a>
+	<?php
+} );
+
+$tree->setRendererSelected( function( Data_Tree_Node $node ) : void {
+	?>
+	<b><?=$node->getLabel()?></b>
+	<?php
+} );
+
+echo $tree;

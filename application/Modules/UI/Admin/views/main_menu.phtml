@@ -1,0 +1,59 @@
+<?php
+use Jet\UI;
+use Jet\Navigation_MenuSet;
+use Jet\Navigation_Menu;
+use Jet\Navigation_Menu_Item;
+
+$showMenu = function( Navigation_Menu $menu, callable $separator_renderer, callable $item_renderer ) {
+	$separator_allowed = false;
+	
+	$count = count($menu->getItems());
+	$i=0;
+	foreach( $menu->getItems() as $item ) {
+		$i++;
+		$is_last = $i==$count;
+		
+		if( $item->getSeparatorBefore() ) {
+			if($separator_allowed) {
+				$separator_renderer();
+			}
+			
+			$separator_allowed = false;
+		}
+		
+		$item_renderer( $item );
+		$separator_allowed = true;
+		
+		if($is_last) {
+			break;
+		}
+		
+		if( $item->getSeparatorAfter() ) {
+			$separator_renderer();
+			$separator_allowed = false;
+		}
+	}
+}
+?>
+	<?php foreach( Navigation_MenuSet::get( 'admin' )->getMenus() as $menu ): ?>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+			   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<?= $menu->getLabel() ?> <span class="caret"></span>
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<?php
+				$showMenu(
+					menu: $menu,
+					separator_renderer: function() {
+						?><div class="dropdown-divider"></div><?php
+					},
+					item_renderer: function( Navigation_Menu_Item $item) {
+						?><a class="dropdown-item" href="<?= $item->getUrl() ?>"><?= UI::icon( $item->getIcon() ) ?> <?= $item->getLabel() ?></a><?php
+					}
+				);
+				?>
+			</div>
+
+		</li>
+	<?php endforeach; ?>

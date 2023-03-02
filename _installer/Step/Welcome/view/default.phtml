@@ -1,0 +1,25 @@
+<?php
+
+namespace JetApplication\Installer;
+
+use Jet\MVC_View;
+use Jet\Tr;
+use Jet\UI;
+
+/**
+ * @var MVC_View $this
+ */
+?>
+
+
+<?php foreach( Installer::getAvailableLocales() as $locale ): ?>
+	<div style="padding: 10px">
+		<?= UI::flag( $locale ) ?>&nbsp;&nbsp;<b><?= $locale->getLanguageName( $locale ) ?></b>
+		<br/>
+		<a href="?locale=<?= $locale ?>" style="text-decoration: underline"><?= Tr::_(
+			text: 'Please choose your language',
+			dictionary: Installer::getCurrentStepName(),
+			locale: $locale
+		) ?></a>
+	</div>
+<?php endforeach; ?>
