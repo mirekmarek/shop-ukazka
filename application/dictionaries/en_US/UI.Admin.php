@@ -5,4 +5,5 @@ return [
 	'Content' => '',
 	'System' => '',
 	'Logs and statistics' => '',
+	'Katalog' => '',
 ];

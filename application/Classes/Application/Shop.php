@@ -8,10 +8,12 @@
 
 namespace JetApplication;
 
+use Jet\Locale;
 use Jet\Logger;
 
 use Jet\MVC;
 use Jet\MVC_Base_Interface;
+use Jet\MVC_Page_Interface;
 use Jet\MVC_Router;
 
 use Jet\Auth;
@@ -24,6 +26,8 @@ use Jet\SysConf_Jet_UI;
  */
 class Application_Shop
 {
+	const PAGE_CATALOG_ID = MVC::HOMEPAGE_ID;
+	
 	/**
 	 * @return string
 	 */
@@ -38,6 +42,15 @@ class Application_Shop
 	public static function getBase(): MVC_Base_Interface
 	{
 		return MVC::getBase( static::getBaseId() );
+	}
+	
+	public static function getCatalogPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		if(!$locale) {
+			$locale = Locale::getCurrentLocale();
+		}
+		
+		return MVC::getPage( static::PAGE_CATALOG_ID, $locale, static::getBaseId() );
 	}
 
 

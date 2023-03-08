@@ -7,13 +7,17 @@ use Jet\Form;
 use Jet\Form_Renderer;
 use Jet\UI;
 use Jet\Locale;
+use JetApplication\Category;
 
 /**
-* @var MVC_View $this
-* @var Form $form
-*/
+ * @var MVC_View $this
+ * @var Form $form
+ * @var Category $category
+ */
 
 $form = $this->getRaw( 'form' );
+$category = $this->getRaw('category');
+
 
 $form->renderer()->setDefaultLabelWidth( [
 	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
@@ -65,10 +69,17 @@ foreach( $parent->getSelectOptions() as $option ) {
 		<?= $form->field( 'parent_id' ) ?>
 		<?= $form->field( 'internal_name' ) ?>
 		<?= $form->field( 'internal_notes' ) ?>
-		<?= $form->field( 'is_active' ) ?>
+		
+		
 		<?php foreach( $form->getSubFormPrefixes('/localized') as $locale => $prefix ):
-			$locale = new Locale( $locale ); ?>
+			$locale = new Locale( $locale );
+			$URL = $category->getLocalized( $locale )->getURL();
+			?>
 			<legend><?= UI::flag( $locale ) ?>&nbsp;<?= $locale->getName() ?></legend>
+			
+			<a href="<?=$URL?>" target="_blank"><?=$URL?></a>
+		
+			<?= $form->field( $prefix.'is_active' ) ?>
 			<?= $form->field( $prefix.'title' ) ?>
 			<?= $form->field( $prefix.'description' ) ?>
 		<?php endforeach; ?>

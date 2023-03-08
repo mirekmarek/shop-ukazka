@@ -5,6 +5,7 @@
 
 namespace JetApplication;
 
+use Jet\Data_Text;
 use Jet\DataModel;
 use Jet\DataModel_Definition;
 use Jet\DataModel_IDController_Passive;
@@ -43,6 +44,20 @@ class Category_Localized extends DataModel_Related_1toN
 		is_key: true
 	)]
 	protected ?Locale $locale = null;
+	/**
+	 * @var bool
+	 */
+	#[DataModel_Definition(
+		type: DataModel::TYPE_BOOL
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_CHECKBOX,
+		label: 'Je aktivní',
+		is_required: false,
+		error_messages: [
+		]
+	)]
+	protected bool $is_active = false;
 
 	/**
 	 * @var string
@@ -77,6 +92,18 @@ class Category_Localized extends DataModel_Related_1toN
 		]
 	)]
 	protected string $description = '';
+	
+	
+	public static function getActive( int $id ) : ?static
+	{
+		return static::load([
+			'category_id' => $id,
+			'AND',
+			'is_active' => true,
+			'AND',
+			'locale' => Locale::getCurrentLocale()
+		]);
+	}
 
 	/**
 	 * @return string
@@ -85,7 +112,24 @@ class Category_Localized extends DataModel_Related_1toN
 	{
 		return $this->locale->toString();
 	}
+	
+	/**
+	 * @param bool $value
+	 */
+	public function setIsActive( bool $value ) : void
+	{
+		$this->is_active = (bool)$value;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function getIsActive() : bool
+	{
+		return $this->is_active;
+	}
 
+	
 	/**
 	 * @return int
 	 */
@@ -144,5 +188,17 @@ class Category_Localized extends DataModel_Related_1toN
 	public function getDescription() : string
 	{
 		return $this->description;
+	}
+	
+	public function getURL() : string
+	{
+		return Application_Shop::getCatalogPage( $this->locale )->getURL(
+			path_fragments: [$this->getURLPath()]
+		);
+	}
+	
+	public function getURLPath() : string
+	{
+		return str_replace(' ', '-', Data_Text::removeAccents( $this->title )).'-c-'.$this->category_id;
 	}
 }
