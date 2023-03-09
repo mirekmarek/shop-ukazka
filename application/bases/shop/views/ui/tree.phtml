@@ -17,6 +17,9 @@ $icon_size = UI_icon::SIZE_SMALL;
 ?>
 <div class="tree">
 	<?php foreach( $tree->getData() as $node ):
+		if($node->getIsRoot()) {
+			continue;
+		}
 
 		/**
 		 * @var Data_Tree_Node $node
@@ -38,7 +41,7 @@ $icon_size = UI_icon::SIZE_SMALL;
 		}
 
 
-		$padding = ($node->getDepth()) * $icon_width;
+		$padding = ($node->getDepth()-1) * $icon_width;
 		?>
 		<div class="tree-row-container">
 			<div class="tree-row<?= $tree->getSelectedId() == $node->getId() ? ' selected' : '' ?>">

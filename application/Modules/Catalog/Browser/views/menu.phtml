@@ -1,0 +1,43 @@
+<?php
+namespace JetApplicationModule\Catalog\Browser;
+
+use Jet\MVC_View;
+use Jet\UI_tree;
+use JetApplication\Category;
+use JetApplication\Category_MenuItem;
+
+/**
+ * @var MVC_View $this;
+ * @var Controller_Main $controller
+ */
+
+$controller = $this->getController();
+
+$category = $controller->getCategory();
+
+$tree = new UI_tree();
+
+$tree->setData( Category::getMenuTree() );
+if($category) {
+	$tree->setSelectedId( $category->getCategoryId() );
+}
+
+$tree->setRendererNormal( function( Category_MenuItem $node ) : void {
+	?>
+	<a href="<?=$node->getURL()?>"><?=$node->getLabel()?></a>
+	<?php
+} );
+
+$tree->setRendererOpened( function( Category_MenuItem $node ) : void {
+	?>
+	<a href="<?=$node->getURL()?>"><i><?=$node->getLabel()?></i></a>
+	<?php
+} );
+
+$tree->setRendererSelected( function( Category_MenuItem $node ) : void {
+	?>
+	<b><?=$node->getLabel()?></b>
+	<?php
+} );
+
+echo $tree;

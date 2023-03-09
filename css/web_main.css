@@ -1,0 +1,34 @@
+.tree {
+	padding: 2px;
+}
+
+.tree-row-container {
+	display: table;
+}
+
+.tree-row {
+	display: table-row;
+}
+
+.tree-row-icon-container {
+	display: table-cell;
+}
+
+.tree-row-icon-container span {
+	margin: 3px;
+}
+
+.tree-row-node-container {
+	display: table-cell;
+}
+
+.tree-node {
+}
+
+.tree-node-selected {
+	font-weight: bolder;
+}
+
+.tree-node-opened {
+	font-style: italic;
+}

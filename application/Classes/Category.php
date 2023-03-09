@@ -118,7 +118,8 @@ class Category extends DataModel
 	
 	protected static ?Data_Tree $tree = null;
 	
-	protected static ?Data_Tree $active_tree = null;
+	protected static ?Data_Tree $menu_tree = null;
+	
 	
 	public static function getTree() : Data_Tree
 	{
@@ -146,9 +147,9 @@ class Category extends DataModel
 		return static::$tree;
 	}
 	
-	public static function getActiveTree() : Data_Tree
+	public static function getMenuTree() : Data_Tree
 	{
-		if(!static::$active_tree) {
+		if(!static::$menu_tree) {
 			$data = static::dataFetchAll(
 				select: [
 					'id',
@@ -156,27 +157,28 @@ class Category extends DataModel
 					'category_localized.title'
 				],
 				where: [
-					'category_localized.locale' => Locale::getCurrentLocale(),
+					'category_localized.is_active' => true,
 					'AND',
-					'category_localized.is_active' => true
+					'category_localized.locale' => Locale::getCurrentLocale()
 				],
-				order_by: ['internal_name']
+				order_by: ['category_localized.title']
 			);
 			
+			static::$menu_tree = new Data_Tree();
+			static::$menu_tree->setNodesClassName( Category_MenuItem::class );
+			static::$menu_tree->setLabelKey( 'title' );
 			
-			static::$active_tree = new Data_Tree();
-			static::$active_tree->setLabelKey( 'title' );
+			static::$menu_tree->getRootNode()->setId(0);
+			static::$menu_tree->getRootNode()->setLabel('');
 			
-			static::$active_tree->getRootNode()->setId(0);
-			static::$active_tree->getRootNode()->setLabel('');
+			static::$menu_tree->setAdoptOrphans( true );
 			
-			static::$active_tree->setIgnoreOrphans( true );
-			
-			static::$active_tree->setData( $data );
+			static::$menu_tree->setData( $data );
 		}
 		
-		return static::$active_tree;
+		return static::$menu_tree;
 	}
+	
 	
 	
 	public function __construct()
