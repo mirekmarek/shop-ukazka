@@ -7,13 +7,16 @@ use Jet\Form;
 use Jet\Form_Renderer;
 use Jet\UI;
 use Jet\Locale;
+use JetApplication\Product;
 
 /**
 * @var MVC_View $this
 * @var Form $form
+ * @var Product $product
 */
 
 $form = $this->getRaw( 'form' );
+$product=  $this->getRaw('product');
 
 $form->renderer()->setDefaultLabelWidth( [
 	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
@@ -63,6 +66,16 @@ $category_field->input()->addCustomCssStyle('height: 400px');
 		<?= $form->field( 'internal_code' ) ?>
 		<?= $form->field( 'EAN' ) ?>
 		<?= $form->field( 'supplier_code' ) ?>
+		
+		<?php if(($img=$product->getImageMain())):?>
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-10">
+				<a href="<?=$img?>" target="_blank"><img src="<?=$img?>" style="max-width: 300px;height: auto;"></a>
+			</div>
+		</div>
+		<?php endif; ?>
+		
 		<?= $form->field( 'image_main' ) ?>
 		<?= $form->field( 'categories' ) ?>
 		

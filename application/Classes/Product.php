@@ -10,6 +10,7 @@ use Jet\DataModel_Definition;
 use Jet\DataModel_Fetch_Instances;
 use Jet\DataModel_IDController_AutoIncrement;
 use Jet\Form;
+use Jet\Form_Field_File_UploadedFile;
 use Jet\Locale;
 use Jet\Form_Field;
 use Jet\Form_Definition;
@@ -367,11 +368,14 @@ class Product extends DataModel
 	}
 
 	/**
-	 * @param string $value
+	 * @param Form_Field_File_UploadedFile[] $images
 	 */
-	public function setImageMain( string $value ) : void
+	public function setImageMain( array $images ) : void
 	{
-		$this->image_main = $value;
+		foreach( $images as $image ) {
+			$this->image_main = Images::uploadImageAndReturnURI('product', $this->id, 'main', $image);
+			break;
+		}
 	}
 
 	/**
