@@ -27,6 +27,17 @@ $form->renderer()->setDefaultFieldWidth( [
 	Form_Renderer::LJ_SIZE_MEDIUM => 10,
 	Form_Renderer::LJ_SIZE_LARGE => 8
 ] );
+
+/**
+ * @var \Jet\Form_Field_Select $category_field
+ */
+$category_field = $form->field( 'categories' );
+
+foreach($category_field->getSelectOptions() as $option) {
+	$option->setSelectOptionCssStyle('padding-left: '.($option->getDepth()*20).'px');
+}
+
+
 ?>
 
 
@@ -50,6 +61,8 @@ $form->renderer()->setDefaultFieldWidth( [
 		<?= $form->field( 'EAN' ) ?>
 		<?= $form->field( 'supplier_code' ) ?>
 		<?= $form->field( 'image_main' ) ?>
+		<?= $form->field( 'categories' ) ?>
+		
 		<?php foreach( $form->getSubFormPrefixes('/localized') as $locale => $prefix ):
 			$locale = new Locale( $locale ); ?>
 			<legend><?= UI::flag( $locale ) ?>&nbsp;<?= $locale->getName() ?></legend>

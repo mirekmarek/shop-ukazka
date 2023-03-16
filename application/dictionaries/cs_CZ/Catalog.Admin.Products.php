@@ -22,4 +22,8 @@ return [
 	'AAA' => '',
 	'CZK' => '',
 	'EUR' => '',
+	'Kategorie:' => '',
+	'Product <b>%ITEM_NAME%</b> has been created' => '',
+	'Edit product <b>%ITEM_NAME%</b>' => '',
+	'Product <b>%ITEM_NAME%</b> has been updated' => '',
 ];

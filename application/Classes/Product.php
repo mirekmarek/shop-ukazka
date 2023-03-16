@@ -160,6 +160,28 @@ class Product extends DataModel
 		is_sub_forms: true
 	)]
 	protected array $localized = [];
+
+	/**
+	 * @var array
+	 */ 
+	#[DataModel_Definition(
+		type: DataModel::TYPE_DATA_MODEL,
+		data_model_class: Product_Category::class
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_MULTI_SELECT,
+		label: 'Kategorie:',
+		is_required: false,
+		select_options_creator: [
+			'JetApplication\\Category',
+			'getTree'
+		],
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte',
+			Form_Field::ERROR_CODE_INVALID_VALUE => 'Prosím zadejte'
+		]
+	)]
+	protected array $categories = [];
 	
 	
 	public function __construct()
@@ -358,5 +380,31 @@ class Product extends DataModel
 	public function getImageMain() : string
 	{
 		return $this->image_main;
+	}
+
+	/**
+	 */
+	public function setCategories( array $category_id ) : void
+	{
+		foreach( $category_id as $id ) {
+			if(!isset($this->categories[$id])) {
+				$this->categories[$id] = new Product_Category();
+				$this->categories[$id]->setCategoryId( $id );
+			}
+		}
+		
+		foreach( array_keys($this->categories) as $id ) {
+			if(!in_array($id, $category_id)) {
+				$this->categories[$id]->delete();
+			}
+		}
+		
+	}
+
+	/**
+	 */
+	public function getCategoryIDs() : array
+	{
+		return array_keys( $this->categories );
 	}
 }
