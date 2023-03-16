@@ -1,5 +1,6 @@
 <?php
 
+use Jet\Form_Field_Select;
 use Jet\MVC;
 use Jet\MVC_View;
 use Jet\Form;
@@ -29,13 +30,15 @@ $form->renderer()->setDefaultFieldWidth( [
 ] );
 
 /**
- * @var \Jet\Form_Field_Select $category_field
+ * @var Form_Field_Select $category_field
  */
 $category_field = $form->field( 'categories' );
 
 foreach($category_field->getSelectOptions() as $option) {
 	$option->setSelectOptionCssStyle('padding-left: '.($option->getDepth()*20).'px');
 }
+
+$category_field->input()->addCustomCssStyle('height: 400px');
 
 
 ?>
