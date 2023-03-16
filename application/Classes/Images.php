@@ -29,7 +29,7 @@ class Images
 			IO_Dir::create( $dir_path );
 		}
 		
-		IO_File::copy( $file->getTmpFilePath(), $dir_path.$file_name );
+		IO_File::copy( $file->getTmpFilePath(), $dir_path.$file_name, true );
 		
 		return SysConf_URI::getImages().$dir_name.$file_name;
 		
