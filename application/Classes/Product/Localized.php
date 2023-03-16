@@ -52,7 +52,11 @@ class Product_Localized extends DataModel_Related_1toN
 		is_key: true
 	)]
 	#[Form_Definition(
-		type: Form_Field::TYPE_CHECKBOX
+		type: Form_Field::TYPE_CHECKBOX,
+		label: 'Je aktivní',
+		is_required: false,
+		error_messages: [
+		]
 	)]
 	protected bool $is_active = false;
 
