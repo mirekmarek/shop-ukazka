@@ -27,6 +27,9 @@ use JetApplication\Logger_Web_Event;
 
 use JetApplication\Category;
 use JetApplication\Category_Localized;
+use JetApplication\Product;
+use JetApplication\Product_Category;
+use JetApplication\Product_Localized;
 
 /**
  *
@@ -72,8 +75,11 @@ class Installer_Step_CreateDB_Controller extends Installer_Step_Controller
 			Logger_Web_Event::class,
 
 			Category::class,
-			Category_Localized::class
+			Category_Localized::class,
 
+			Product::class,
+			Product_Localized::class,
+			Product_Category::class,
 		];
 
 		$result = [];
