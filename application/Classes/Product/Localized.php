@@ -127,8 +127,7 @@ class Product_Localized extends DataModel_Related_1toN
 	 */
 	public function getArrayKeyValue() : string
 	{
-		//TODO: implement ...
-		return '';
+		return $this->locale->toString();
 	}
 
 	/**
@@ -196,7 +195,7 @@ class Product_Localized extends DataModel_Related_1toN
 	 */
 	public function setIsActive( bool $value ) : void
 	{
-		$this->is_active = (bool)$value;
+		$this->is_active = $value;
 	}
 
 	/**
