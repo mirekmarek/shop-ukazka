@@ -5,28 +5,27 @@
 
 namespace JetApplication;
 
-use Jet\Data_Tree;
 use Jet\DataModel;
 use Jet\DataModel_Definition;
 use Jet\DataModel_Fetch_Instances;
 use Jet\DataModel_IDController_AutoIncrement;
 use Jet\Form;
-use Jet\Form_Field;
 use Jet\Locale;
+use Jet\Form_Field;
 use Jet\Form_Definition;
 
 /**
  *
  */
 #[DataModel_Definition(
-	name: 'category',
-	database_table_name: 'category',
+	name: 'product',
+	database_table_name: 'product',
 	id_controller_class: DataModel_IDController_AutoIncrement::class,
 	id_controller_options: [
 		'id_property_name' => 'id'
 	]
 )]
-class Category extends DataModel
+class Product extends DataModel
 {
 
 	/**
@@ -49,28 +48,6 @@ class Category extends DataModel
 	protected ?Form $_form_add = null;
 
 	/**
-	 * @var int
-	 */ 
-	#[DataModel_Definition(
-		type: DataModel::TYPE_INT,
-		is_key: true
-	)]
-	#[Form_Definition(
-		type: Form_Field::TYPE_SELECT,
-		label: 'Nadřazená kategorie:',
-		is_required: true,
-		select_options_creator: [
-			self::class,
-			'getTree'
-		],
-		error_messages: [
-			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte',
-			Form_Field::ERROR_CODE_INVALID_VALUE => 'Prosím zadejte'
-		]
-	)]
-	protected int $parent_id = 0;
-
-	/**
 	 * @var string
 	 */ 
 	#[DataModel_Definition(
@@ -82,8 +59,7 @@ class Category extends DataModel
 		label: 'Interní název:',
 		is_required: true,
 		error_messages: [
-			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte',
-			Form_Field::ERROR_CODE_INVALID_FORMAT => 'Prosím zadejte'
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte'
 		]
 	)]
 	protected string $internal_name = '';
@@ -105,80 +81,85 @@ class Category extends DataModel
 	protected string $internal_notes = '';
 
 	/**
-	 * @var Category_Localized[]
+	 * @var string
 	 */ 
 	#[DataModel_Definition(
+		type: DataModel::TYPE_STRING,
+		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Interní kód:',
+		is_required: false,
+		error_messages: [
+		]
+	)]
+	protected string $internal_code = '';
+
+	/**
+	 * @var string
+	 */ 
+	#[DataModel_Definition(
+		type: DataModel::TYPE_STRING,
+		max_len: 30
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'EAN:',
+		is_required: false,
+		error_messages: [
+		]
+	)]
+	protected string $EAN = '';
+
+	/**
+	 * @var string
+	 */ 
+	#[DataModel_Definition(
+		type: DataModel::TYPE_STRING,
+		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Dodavatelský kód:',
+		is_required: false,
+		error_messages: [
+		]
+	)]
+	protected string $supplier_code = '';
+
+	/**
+	 * @var string
+	 */ 
+	#[DataModel_Definition(
+		type: DataModel::TYPE_STRING,
+		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_FILE_IMAGE,
+		label: 'Hlavní obrázek:',
+		is_required: false,
+		maximal_width: 1600,
+		maximal_height: 1200,
+		allow_multiple_upload: false,
+		error_messages: [
+			Form_Field::ERROR_CODE_FILE_IS_TOO_LARGE => 'Obrázek je příliš velký',
+			Form_Field::ERROR_CODE_DISALLOWED_FILE_TYPE => 'Nepodporovaný typ obrázku'
+		]
+	)]
+	protected string $image_main = '';
+	
+	/**
+	 * @var Product_Localized[]
+	 */
+	#[DataModel_Definition(
 		type: DataModel::TYPE_DATA_MODEL,
-		data_model_class: Category_Localized::class
+		data_model_class: Product_Localized::class
 	)]
 	#[Form_Definition(
 		is_sub_forms: true
 	)]
 	protected array $localized = [];
-	
-	protected static ?Data_Tree $tree = null;
-	
-	protected static ?Data_Tree $menu_tree = null;
-	
-	
-	public static function getTree() : Data_Tree
-	{
-		if(!static::$tree) {
-			$data = static::dataFetchAll(
-				select: [
-					'id',
-					'parent_id',
-					'internal_name'
-				],
-				order_by: ['internal_name']
-			);
-			
-			static::$tree = new Data_Tree();
-			static::$tree->setLabelKey( 'internal_name' );
-			
-			static::$tree->getRootNode()->setId(0);
-			static::$tree->getRootNode()->setLabel('Kategorie');
-			
-			static::$tree->setAdoptOrphans( true );
-			
-			static::$tree->setData( $data );
-		}
-		
-		return static::$tree;
-	}
-	
-	public static function getMenuTree() : Data_Tree
-	{
-		if(!static::$menu_tree) {
-			$data = static::dataFetchAll(
-				select: [
-					'id',
-					'parent_id',
-					'category_localized.title'
-				],
-				where: [
-					'category_localized.is_active' => true,
-					'AND',
-					'category_localized.locale' => Locale::getCurrentLocale()
-				],
-				order_by: ['category_localized.title']
-			);
-			
-			static::$menu_tree = new Data_Tree();
-			static::$menu_tree->setNodesClassName( Category_MenuItem::class );
-			static::$menu_tree->setLabelKey( 'title' );
-			
-			static::$menu_tree->getRootNode()->setId(0);
-			static::$menu_tree->getRootNode()->setLabel('');
-			
-			static::$menu_tree->setAdoptOrphans( true );
-			
-			static::$menu_tree->setData( $data );
-		}
-		
-		return static::$menu_tree;
-	}
-	
 	
 	
 	public function __construct()
@@ -195,14 +176,15 @@ class Category extends DataModel
 	{
 		foreach( Application_Shop::getBase()->getLocales() as $locale_str=>$locale ) {
 			if(!isset($this->localized[$locale_str])) {
-				$localized = new Category_Localized();
+				$localized = new Product_Localized();
 				$localized->setLocale( $locale );
 				
 				$this->localized[$locale_str] = $localized;
 			}
 		}
 	}
-
+	
+	
 	/**
 	 * @return Form
 	 */
@@ -272,22 +254,6 @@ class Category extends DataModel
 	}
 
 	/**
-	 * @param int $value
-	 */
-	public function setParentId( int $value ) : void
-	{
-		$this->parent_id = $value;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getParentId() : int
-	{
-		return $this->parent_id;
-	}
-
-	/**
 	 * @param string $value
 	 */
 	public function setInternalName( string $value ) : void
@@ -318,16 +284,79 @@ class Category extends DataModel
 	{
 		return $this->internal_notes;
 	}
-	
 
 	/**
+	 * @param string $value
 	 */
-	public function getLocalized( ?Locale $locale = null ) : Category_Localized
+	public function setInternalCode( string $value ) : void
+	{
+		$this->internal_code = $value;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInternalCode() : string
+	{
+		return $this->internal_code;
+	}
+
+	/**
+	 * @param string $value
+	 */
+	public function setEan( string $value ) : void
+	{
+		$this->EAN = $value;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEan() : string
+	{
+		return $this->EAN;
+	}
+
+	/**
+	 * @param string $value
+	 */
+	public function setSupplierCode( string $value ) : void
+	{
+		$this->supplier_code = $value;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSupplierCode() : string
+	{
+		return $this->supplier_code;
+	}
+	
+	/**
+	 */
+	public function getLocalized( ?Locale $locale = null ) : Product_Localized
 	{
 		if( !$locale ) {
 			$locale = Locale::getCurrentLocale();
 		}
 		
 		return $this->localized[$locale->toString()];
+	}
+
+	/**
+	 * @param string $value
+	 */
+	public function setImageMain( string $value ) : void
+	{
+		$this->image_main = $value;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getImageMain() : string
+	{
+		return $this->image_main;
 	}
 }
