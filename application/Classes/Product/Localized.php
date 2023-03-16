@@ -9,6 +9,8 @@ use Jet\DataModel;
 use Jet\DataModel_Definition;
 use Jet\DataModel_IDController_Passive;
 use Jet\DataModel_Related_1toN;
+use Jet\Form;
+use Jet\Form_Field_Select;
 use Jet\Locale;
 use Jet\Form_Field;
 use Jet\Form_Definition;
@@ -240,5 +242,20 @@ class Product_Localized extends DataModel_Related_1toN
 	public function getVatRate() : float
 	{
 		return $this->vat_rate;
+	}
+	
+	public function createForm( string $form_name, array $only_fields = [], array $exclude_fields = [] ): Form
+	{
+		$form = parent::createForm($form_name, $only_fields, $exclude_fields);
+		
+		if($form->fieldExists('vat_rate')) {
+			/**
+			 * @var Form_Field_Select $field
+			 */
+			$field = $form->field('vat_rate');
+			$field->setSelectOptions( VAT::getVATRates( $this->locale ) );
+		}
+		
+		return $form;
 	}
 }
