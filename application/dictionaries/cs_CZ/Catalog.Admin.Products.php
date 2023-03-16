@@ -19,4 +19,7 @@ return [
 	'Cena:' => '',
 	'Sazba DPH:' => '',
 	'Je aktivní' => '',
+	'AAA' => '',
+	'CZK' => '',
+	'EUR' => '',
 ];

@@ -256,6 +256,10 @@ class Product_Localized extends DataModel_Related_1toN
 			$field->setSelectOptions( VAT::getVATRates( $this->locale ) );
 		}
 		
+		if($form->fieldExists('price')) {
+			$form->field('price')->setHelpText( Currency::getCurrencyCode( $this->locale ) );
+		}
+		
 		return $form;
 	}
 }
