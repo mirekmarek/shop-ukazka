@@ -17,3 +17,4 @@ cleanup.sh
 images/test_uploads
 library/Composer/
 composer.lock
+/images/
