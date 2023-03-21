@@ -14,8 +14,11 @@ use JetApplication\Product;
 $product = $this->getRaw('product');
 $product_localized = $product->getLocalized();
 
+$main_img = $product->getImageMainThb( 300, 300 );
 ?>
 <h1><?=$product_localized->getName()?></h1>
+
+<img src="<?=$main_img?>" alt="<?=$product_localized->getName()?>">
 
 <p>
 	<?=$product_localized->getDescription()?>

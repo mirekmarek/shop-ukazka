@@ -385,6 +385,15 @@ class Product extends DataModel
 	{
 		return $this->image_main;
 	}
+	
+	public function getImageMainThb( int $max_w, int $max_h ) : string
+	{
+		if(!$this->image_main) {
+			return '';
+		}
+		
+		return Images::createThumbnailAndReturnURI( $this->image_main, $max_w, $max_h );
+	}
 
 	/**
 	 */
