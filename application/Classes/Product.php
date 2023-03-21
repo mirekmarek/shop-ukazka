@@ -444,4 +444,33 @@ class Product extends DataModel
 		
 		return $products[0];
 	}
+	
+	/**
+	 * @param int $category_id
+	 * @param Locale|null $locale
+	 * @return static[]
+	 */
+	public static function getActiveByCategory( int $category_id, ?Locale $locale=null ) : array
+	{
+		if(!$locale) {
+			$locale = Locale::getCurrentLocale();
+		}
+		
+		$ids = Product_Category::dataFetchCol(select: ['product_id'], where: ['category_id'=>$category_id]);
+		if(!$ids) {
+			return [];
+		}
+		
+		return static::fetch([
+			'product' => [
+				'id' => $ids
+			],
+			'product_localized' => [
+				'locale' => $locale,
+				'AND',
+				'is_active' => true
+			]
+		]);
+	}
+	
 }
