@@ -80,8 +80,13 @@ $category_field->input()->addCustomCssStyle('height: 400px');
 		<?= $form->field( 'categories' ) ?>
 		
 		<?php foreach( $form->getSubFormPrefixes('/localized') as $locale => $prefix ):
-			$locale = new Locale( $locale ); ?>
+			$locale = new Locale( $locale );
+			$URL = $product?->getLocalized( $locale )->getURL();
+			?>
 			<legend><?= UI::flag( $locale ) ?>&nbsp;<?= $locale->getName() ?></legend>
+
+			<a href="<?=$URL?>" target="_blank"><?=$URL?></a>
+		
 			<?= $form->field( $prefix.'is_active' ) ?>
 			<?= $form->field( $prefix.'name' ) ?>
 			<?= $form->field( $prefix.'description' ) ?>

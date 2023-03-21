@@ -14,6 +14,7 @@ use Jet\MVC_Controller_Router;
 use Jet\MVC_Controller_Router_Interface;
 use Jet\Navigation_Breadcrumb;
 use JetApplication\Category;
+use JetApplication\Product;
 use JetApplication\Category_Localized;
 use JetApplication\Category_MenuItem;
 
@@ -25,6 +26,7 @@ class Controller_Main extends MVC_Controller_Default
 	protected ?MVC_Controller_Router $router = null;
 	
 	protected static ?Category_Localized $category = null;
+	protected static ?Product $product = null;
 	
 	public function getControllerRouter(): MVC_Controller_Router_Interface|null
 	{
@@ -66,6 +68,42 @@ class Controller_Main extends MVC_Controller_Default
 				
 				return true;
 			} );
+			
+			$this->router->addAction('product_detail')->setResolver( function() use ($main_router) : bool {
+				$path = $main_router->getUrlPath();
+				
+				if(!$path) {
+					return false;
+				}
+				
+				if(!preg_match('/.*-p-([0-9]+)$/', $path, $m)) {
+					return false;
+				}
+				
+				$id = $m[1];
+				
+				$product = Product::getActive( $id );
+				if(!$product) {
+					return false;
+				}
+				
+				static::$product = $product;
+				
+				if($product->getLocalized()->getURLPath()!=$path) {
+					$main_router->setIsRedirect(
+						$product->getLocalized()->getURL(),
+						Http_Headers::CODE_301_MOVED_PERMANENTLY
+					);
+					
+					return false;
+				}
+				
+				$main_router->setUsedUrlPath( $path );
+				
+				
+				return true;
+			} );
+			
 		}
 		
 		return $this->router;
@@ -79,6 +117,12 @@ class Controller_Main extends MVC_Controller_Default
 		return self::$category;
 	}
 	
+	public function product_detail_Action() : void
+	{
+		$this->view->setVar('product', static::$product);
+		
+		$this->output( 'product/detail' );
+	}
 	
 	
 	public function category_detail_Action() : void
@@ -99,7 +143,7 @@ class Controller_Main extends MVC_Controller_Default
 			Navigation_Breadcrumb::addURL( $node->getLabel(), $node->getURL() );
 		}
 
-		$this->output( 'detail' );
+		$this->output( 'category/detail' );
 	}
 	
 	public function main_menu_Action() : void

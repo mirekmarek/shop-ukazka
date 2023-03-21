@@ -5,6 +5,7 @@
 
 namespace JetApplication;
 
+use Jet\Data_Text;
 use Jet\DataModel;
 use Jet\DataModel_Definition;
 use Jet\DataModel_IDController_Passive;
@@ -262,4 +263,17 @@ class Product_Localized extends DataModel_Related_1toN
 		
 		return $form;
 	}
+	
+	public function getURL() : string
+	{
+		return Application_Shop::getCatalogPage( $this->locale )->getURL(
+			path_fragments: [$this->getURLPath()]
+		);
+	}
+	
+	public function getURLPath() : string
+	{
+		return str_replace(' ', '-', Data_Text::removeAccents( $this->name )).'-p-'.$this->product_id;
+	}
+	
 }

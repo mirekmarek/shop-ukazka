@@ -411,4 +411,28 @@ class Product extends DataModel
 	{
 		return array_keys( $this->categories );
 	}
+	
+	public static function getActive( int $id, ?Locale $locale=null ) : ?Product
+	{
+		if(!$locale) {
+			$locale = Locale::getCurrentLocale();
+		}
+		
+		$products = static::fetch([
+			'product' => [
+				'id' => $id
+			],
+			'product_localized' => [
+				'locale' => $locale,
+				'AND',
+				'is_active' => true
+			]
+		]);
+		
+		if(!$products) {
+			return null;
+		}
+		
+		return $products[0];
+	}
 }

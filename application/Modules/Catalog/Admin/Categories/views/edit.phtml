@@ -73,7 +73,7 @@ foreach( $parent->getSelectOptions() as $option ) {
 		
 		<?php foreach( $form->getSubFormPrefixes('/localized') as $locale => $prefix ):
 			$locale = new Locale( $locale );
-			$URL = $category->getLocalized( $locale )->getURL();
+			$URL = $category?->getLocalized( $locale )->getURL();
 			?>
 			<legend><?= UI::flag( $locale ) ?>&nbsp;<?= $locale->getName() ?></legend>
 			
