@@ -2,6 +2,8 @@
 namespace JetApplicationModule\Catalog\Browser;
 
 use Jet\MVC_View;
+use Jet\Tr;
+use JetApplication\Currency;
 use JetApplication\Product;
 
 /**
@@ -17,4 +19,10 @@ $product_localized = $product->getLocalized();
 
 <p>
 	<?=$product_localized->getDescription()?>
+</p>
+
+<p>
+	<?=Tr::_('Konečná cena: %price%', [
+			'price' => Currency::format( $product_localized->getPrice() )
+	])?>
 </p>
