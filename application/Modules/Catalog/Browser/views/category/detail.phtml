@@ -2,7 +2,9 @@
 namespace JetApplicationModule\Catalog\Browser;
 
 use Jet\MVC_View;
+use JetApplication\Category;
 use JetApplication\Category_Localized;
+use JetApplication\Category_MenuItem;
 
 /**
  * @var MVC_View   $this
@@ -11,9 +13,22 @@ use JetApplication\Category_Localized;
 
 $category = $this->getRaw('category');
 
+$subcategories = Category::getMenuTree()->getNode( $category->getCategoryId() )->getChildren();
 ?>
 <h1><?=$category->getTitle()?></h1>
 
 <p>
 	<?=$category->getDescription()?>
 </p>
+
+<?php if($subcategories): ?>
+<hr>
+	<?php foreach($subcategories as $subcategory):
+		/**
+		 * @var Category_MenuItem $subcategory
+		 */
+		?>
+		<a href="<?=$subcategory->getURL()?>"><?=$subcategory->getLabel()?></a>
+	<?php endforeach; ?>
+<hr>
+<?php endif; ?>
