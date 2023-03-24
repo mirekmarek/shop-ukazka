@@ -8,10 +8,12 @@
 namespace JetApplicationModule\Catalog\Browser;
 
 use Jet\Http_Headers;
+use Jet\Http_Request;
 use Jet\MVC;
 use Jet\MVC_Controller_Default;
 use Jet\MVC_Controller_Router;
 use Jet\MVC_Controller_Router_Interface;
+use Jet\MVC_Layout;
 use Jet\Navigation_Breadcrumb;
 use JetApplication\Category;
 use JetApplication\Product;
@@ -100,6 +102,10 @@ class Controller_Main extends MVC_Controller_Default
 				
 				$main_router->setUsedUrlPath( $path );
 				
+				$category_id = Http_Request::GET()->getInt('c');
+				if($category_id) {
+					static::$category = Category_Localized::getActive( $category_id );
+				}
 				
 				return true;
 			} );
@@ -117,18 +123,11 @@ class Controller_Main extends MVC_Controller_Default
 		return self::$category;
 	}
 	
-	public function product_detail_Action() : void
+	protected function initBn() : void
 	{
-		$this->view->setVar('product', static::$product);
-		
-		$this->output( 'product/detail' );
-	}
-	
-	
-	public function category_detail_Action() : void
-	{
-		$this->view->setVar('category', static::$category);
-		
+		if(!static::$category) {
+			return;
+		}
 		
 		$tree = Category::getMenuTree();
 		
@@ -142,6 +141,33 @@ class Controller_Main extends MVC_Controller_Default
 			 */
 			Navigation_Breadcrumb::addURL( $node->getLabel(), $node->getURL() );
 		}
+		
+	}
+	
+	public function product_detail_Action() : void
+	{
+		$this->view->setVar('product', static::$product);
+		
+		$this->initBn();
+		
+		$product_localized = static::$product->getLocalized();
+		
+		Navigation_Breadcrumb::addURL(
+			$product_localized->getName(),
+			$product_localized->getURL()
+		);
+		
+		MVC_Layout::getCurrentLayout()->setVar( 'canonical', $product_localized->getURL() );
+		
+		$this->output( 'product/detail' );
+	}
+	
+	
+	public function category_detail_Action() : void
+	{
+		$this->view->setVar('category', static::$category);
+		
+		$this->initBn();
 
 		$this->output( 'category/detail' );
 	}

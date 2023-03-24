@@ -46,7 +46,7 @@ $products = Product::getActiveByCategory( $category->getCategoryId() );
 			$main_img = $product->getImageMainThb( 200, 200 );
 			?>
 		<div>
-			<a href="<?=$product_localized->getURL()?>"><?=$product_localized->getName()?></a>
+			<a href="<?=$product_localized->getURL()?>?c=<?=$category->getCategoryId()?>"><?=$product_localized->getName()?></a>
 			<img src="<?=$main_img?>" alt="<?=$product_localized->getName()?>">
 
 			<p>
