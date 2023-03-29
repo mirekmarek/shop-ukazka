@@ -2,8 +2,8 @@
 namespace JetApplicationModule\ShoppingCart;
 
 use Jet\MVC_View;
+use Jet\Tr;
 use Jet\UI;
-use JetApplication\Currency;
 use JetApplication\ShoppingCart;
 
 /**
@@ -11,6 +11,31 @@ use JetApplication\ShoppingCart;
  */
 
 $cart = ShoppingCart::get();
-?>
 
-<?=UI::icon('cart-shopping')?> (<?=$cart->getQty()?>) <?=Currency::format( $cart->getValue() ) ?>
+$popup = UI::dialog('cart-popup', Tr::_('Položka přidána'));
+?>
+<div id="cart-icon">
+	<?php require 'cart-icon.phtml'; ?>
+</div>
+
+<?=$popup->start()?>
+<div id="cart-new-item">
+</div>
+<?=$popup->end()?>
+
+<script>
+	const ShoppingCart = {
+		add: ( product_id ) => {
+			$.ajax({
+				url: '?cart_add='+product_id,
+				dataType: 'json'
+			}).then(function (response) {
+				for( let id in response ) {
+					$('#'+id).html( response[id] )
+				}
+				
+				$('#cart-popup').modal('show');
+			})
+		}
+	};
+</script>

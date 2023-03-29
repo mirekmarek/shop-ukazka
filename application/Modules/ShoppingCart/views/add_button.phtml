@@ -17,4 +17,4 @@ $cart = ShoppingCart::get();
 $product = $this->getRaw('product');
 ?>
 
-<?=UI::button(Tr::_('Koupit'))->setIcon('plus')->setClass('primary')->setUrl(Http_Request::currentURL(['cart_add'=>$product->getId()]));?>
+<?=UI::button(Tr::_('Koupit'))->setIcon('plus')->setClass('primary')->setOnClick( "ShoppingCart.add(".$product->getId().")" );?>

@@ -1,0 +1,23 @@
+<?php
+namespace JetApplicationModule\ShoppingCart;
+
+use Jet\MVC_View;
+use JetApplication\Currency;
+use JetApplication\ShoppingCart_Item;
+
+/**
+ * @var MVC_View   $this
+ * @var ShoppingCart_Item $new_item
+ */
+
+$new_item = $this->getRaw('new_item');
+
+$product = $new_item->getProduct();
+
+$product_localized = $product->getLocalized();
+?>
+<b><?=$product_localized->getName()?></b>
+<br>
+<img src="<?=$product->getImageMainThb(50, 50)?>">
+<br>
+<?=Currency::format( $product_localized->getPrice()*$new_item->getQty() )?>
