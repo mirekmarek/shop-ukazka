@@ -1,16 +1,20 @@
 <?php
 namespace JetApplicationModule\ShoppingCart;
 
+use Jet\Http_Request;
 use Jet\MVC_View;
 use Jet\Tr;
 use Jet\UI;
+use JetApplication\Product;
 use JetApplication\ShoppingCart;
 
 /**
  * @var MVC_View   $this
+ * @var Product $product
  */
 
 $cart = ShoppingCart::get();
+$product = $this->getRaw('product');
 ?>
 
-<?=UI::button(Tr::_('Koupit'))->setIcon('plus')->setClass('primary');?>
+<?=UI::button(Tr::_('Koupit'))->setIcon('plus')->setClass('primary')->setUrl(Http_Request::currentURL(['cart_add'=>$product->getId()]));?>
