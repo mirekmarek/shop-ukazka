@@ -2,12 +2,15 @@
 
 namespace JetApplication;
 
+use Jet\Application_Modules;
 use Jet\BaseObject;
 use Jet\Locale;
 use Jet\Session;
 
 class ShoppingCart extends BaseObject
 {
+	const CART_MODULE_NAME = 'ShoppingCart';
+	
 	/**
 	 * @var ShoppingCart_Item[]
 	 */
@@ -62,5 +65,31 @@ class ShoppingCart extends BaseObject
 		}
 	}
 	
+	public function getQty() : int
+	{
+		$qty = 0;
+		foreach($this->items as $item) {
+			$qty += $item->getQty();
+		}
+		
+		return $qty;
+	}
+	
+	public function getValue() : float
+	{
+		$value = 0.0;
+		foreach($this->items as $item) {
+			$value += $item->getQty()*$item->getProduct()->getLocalized()->getPrice();
+		}
+		
+		return $value;
+	}
+	
+	public static function renderAddButton( Product $product ) : string
+	{
+		$module = Application_Modules::moduleInstance('ShoppingCart');
+		
+		return $module->renderAddButton( $product );
+	}
 	
 }

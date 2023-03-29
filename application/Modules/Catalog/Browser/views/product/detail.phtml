@@ -5,6 +5,7 @@ use Jet\MVC_View;
 use Jet\Tr;
 use JetApplication\Currency;
 use JetApplication\Product;
+use JetApplication\ShoppingCart;
 
 /**
  * @var MVC_View   $this
@@ -29,3 +30,5 @@ $main_img = $product->getImageMainThb( 300, 300 );
 			'price' => Currency::format( $product_localized->getPrice() )
 	])?>
 </p>
+
+<?=ShoppingCart::renderAddButton( $product )?>

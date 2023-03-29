@@ -1,0 +1,16 @@
+<?php
+namespace JetApplicationModule\ShoppingCart;
+
+use Jet\MVC_View;
+use Jet\Tr;
+use Jet\UI;
+use JetApplication\ShoppingCart;
+
+/**
+ * @var MVC_View   $this
+ */
+
+$cart = ShoppingCart::get();
+?>
+
+<?=UI::button(Tr::_('Koupit'))->setIcon('plus')->setClass('primary');?>
