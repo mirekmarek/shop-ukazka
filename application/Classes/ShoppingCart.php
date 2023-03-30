@@ -39,7 +39,7 @@ class ShoppingCart extends BaseObject
 	{
 		foreach($this->items as $product_id=>$item) {
 			if(!$item->getProduct()) {
-				$this->items[ $product_id ];
+				unset($this->items[ $product_id ]);
 			}
 		}
 	}
