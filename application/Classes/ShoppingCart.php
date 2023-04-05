@@ -65,6 +65,29 @@ class ShoppingCart extends BaseObject
 		}
 	}
 	
+	public function plus( int $product_id ) : void
+	{
+		if(isset($this->items[$product_id])) {
+			$this->items[$product_id]->setQty(
+				$this->items[$product_id]->getQty()+1
+			);
+		}
+	}
+	
+	public function minus( int $product_id ) : void
+	{
+		if(isset($this->items[$product_id])) {
+			$this->items[$product_id]->setQty(
+				$this->items[$product_id]->getQty()-1
+			);
+			
+			if($this->items[$product_id]->getQty()<=0) {
+				$this->delete($product_id);
+			}
+		}
+	}
+	
+	
 	public function getQty() : int
 	{
 		$qty = 0;
