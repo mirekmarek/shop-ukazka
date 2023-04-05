@@ -1,6 +1,7 @@
 <?php
 namespace JetApplicationModule\ShoppingCart;
 
+use Jet\MVC;
 use Jet\MVC_View;
 use Jet\Tr;
 use Jet\UI;
@@ -19,7 +20,12 @@ $cart = ShoppingCart::get();
 <br>
 <?=Currency::format( $cart->getValue() ) ?>
 
-<?php if($cart->getQty()): ?>
+<?php
+if(
+	$cart->getQty() &&
+	MVC::getPage()->getId()!=Application_Shop::getCartPage()->getId()
+):
+?>
 	<br>
 	<?=UI::button(Tr::_('Objednat'))->setUrl( Application_Shop::getCartPage()->getURL() )->setClass('success') ?>
 <?php endif; ?>
