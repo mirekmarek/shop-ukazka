@@ -25,17 +25,37 @@ $popup = UI::dialog('cart-popup', Tr::_('Položka přidána'));
 
 <script>
 	const ShoppingCart = {
-		add: ( product_id ) => {
+		request: (action, onDone) => {
 			$.ajax({
-				url: '?cart_add='+product_id,
+				url: action,
 				dataType: 'json'
 			}).then(function (response) {
 				for( let id in response ) {
 					$('#'+id).html( response[id] )
 				}
-				
+
+				if(onDone) {
+					onDone();
+				}
+			});
+		},
+		
+		add: ( product_id ) => {
+			ShoppingCart.request('?cart_add='+product_id, function () {
 				$('#cart-popup').modal('show');
-			})
+			});
+		},
+
+		plus: ( product_id ) => {
+			ShoppingCart.request('?cart_plus='+product_id);
+		},
+
+		minus: ( product_id ) => {
+			ShoppingCart.request('?cart_minus='+product_id);
+		},
+
+		delete: ( product_id ) => {
+			ShoppingCart.request('?cart_delete='+product_id);
 		}
 	};
 </script>
