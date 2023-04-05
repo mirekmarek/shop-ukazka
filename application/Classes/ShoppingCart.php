@@ -92,4 +92,14 @@ class ShoppingCart extends BaseObject
 		return $module->renderAddButton( $product );
 	}
 	
+	/**
+	 * @return ShoppingCart_Item[]
+	 */
+	public function getItems(): array
+	{
+		return $this->items;
+	}
+	
+	
+	
 }
