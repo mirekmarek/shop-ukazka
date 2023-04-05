@@ -27,6 +27,8 @@ use Jet\SysConf_Jet_UI;
 class Application_Shop
 {
 	const PAGE_CATALOG_ID = MVC::HOMEPAGE_ID;
+	const PAGE_CART_ID = 'shopping-cart';
+	const PAGE_ORDER_ID = 'order';
 	
 	/**
 	 * @return string
@@ -44,15 +46,30 @@ class Application_Shop
 		return MVC::getBase( static::getBaseId() );
 	}
 	
-	public static function getCatalogPage( ?Locale $locale=null ) : MVC_Page_Interface
+	protected static function getPage( string $page_id, ?Locale $locale=null ) : MVC_Page_Interface
 	{
 		if(!$locale) {
 			$locale = Locale::getCurrentLocale();
 		}
 		
-		return MVC::getPage( static::PAGE_CATALOG_ID, $locale, static::getBaseId() );
+		return MVC::getPage( $page_id, $locale, static::getBaseId() );
 	}
-
+	
+	
+	public static function getCatalogPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_CATALOG_ID );
+	}
+	
+	public static function getCartPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_CART_ID );
+	}
+	
+	public static function getOrderPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_ORDER_ID );
+	}
 
 	/**
 	 * @param MVC_Router $router

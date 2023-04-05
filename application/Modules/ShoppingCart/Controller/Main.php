@@ -37,4 +37,9 @@ class Controller_Main extends MVC_Controller_Default
 		
 		$this->output('default');
 	}
+
+	public function detail_Action() : void
+	{
+		$this->output('detail');
+	}
 }
