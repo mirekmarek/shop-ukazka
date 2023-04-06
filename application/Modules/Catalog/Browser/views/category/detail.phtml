@@ -45,15 +45,19 @@ $products = Product::getActiveByCategory( $category->getCategoryId() );
 			
 			$main_img = $product->getImageMainThb( 200, 200 );
 			?>
-		<div>
-			<a href="<?=$product_localized->getURL()?>?c=<?=$category->getCategoryId()?>"><?=$product_localized->getName()?></a>
-			<img src="<?=$main_img?>" alt="<?=$product_localized->getName()?>">
-
-			<p>
-				<?=Tr::_('Konečná cena: %price%', [
-					'price' => Currency::format( $product_localized->getPrice() )
-				])?>
-			</p>
+		<div class="card" style="width: 30%">
+			<div class="card-body">
+				<a href="<?=$product_localized->getURL()?>?c=<?=$category->getCategoryId()?>"><?=$product_localized->getName()?></a>
+				<br>
+				<img src="<?=$main_img?>" alt="<?=$product_localized->getName()?>">
+				<br>
+				<p>
+					<?=Tr::_('Konečná cena: %price%', [
+						'price' => Currency::format( $product_localized->getPrice() )
+					])?>
+				</p>
+				
+			</div>
 		</div>
 		<?php endforeach; ?>
 	</div>

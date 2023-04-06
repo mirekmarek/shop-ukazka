@@ -3,9 +3,7 @@ namespace JetApplicationModule\ShoppingCart;
 
 use Jet\Locale;
 use Jet\MVC_View;
-use Jet\Tr;
 use Jet\UI;
-use JetApplication\Application_Shop;
 use JetApplication\Currency;
 use JetApplication\ShoppingCart;
 
@@ -14,8 +12,7 @@ use JetApplication\ShoppingCart;
  */
 
 $cart = ShoppingCart::get();
-
-if($cart->getQty()):?>
+?>
 <table class="table table-striped">
 	<?php foreach($cart->getItems() as $item):
 		$product= $item->getProduct();
@@ -34,8 +31,3 @@ if($cart->getQty()):?>
 	</tr>
 	<?php endforeach; ?>
 </table>
-<div class="text-right">
-	<?=UI::button(Tr::_('Pokračovat v objednávce'))->setUrl( Application_Shop::getOrderPage()->getURL() )->setClass('success')?>
-</div>
-<?php else: ?>
-<?php endif; ?>
