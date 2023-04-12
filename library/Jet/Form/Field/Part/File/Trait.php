@@ -209,7 +209,6 @@ trait Form_Field_Part_File_Trait
 		
 		$this->_value_raw = [];
 		
-		
 		foreach( $names as $i => $name ) {
 			$file = new Form_Field_File_UploadedFile(
 				file_name: $name,
