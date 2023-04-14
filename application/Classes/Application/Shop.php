@@ -29,6 +29,9 @@ class Application_Shop
 	const PAGE_CATALOG_ID = MVC::HOMEPAGE_ID;
 	const PAGE_CART_ID = 'shopping-cart';
 	const PAGE_ORDER_ID = 'order';
+	const PAGE_ORDER_CONTACT_ID = 'order-contact';
+	const PAGE_ORDER_RECAPITULATION_ID = 'order-recapitulation';
+	const PAGE_ORDER_FINISH_ID = 'order-finish';
 	
 	/**
 	 * @return string
@@ -69,6 +72,21 @@ class Application_Shop
 	public static function getOrderPage( ?Locale $locale=null ) : MVC_Page_Interface
 	{
 		return static::getPage( static::PAGE_ORDER_ID );
+	}
+	
+	public static function getOrderContactPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_ORDER_CONTACT_ID );
+	}
+	
+	public static function getOrderRecapitulationPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_ORDER_RECAPITULATION_ID );
+	}
+	
+	public static function getOrderFinishPage( ?Locale $locale=null ) : MVC_Page_Interface
+	{
+		return static::getPage( static::PAGE_ORDER_FINISH_ID );
 	}
 
 	/**
