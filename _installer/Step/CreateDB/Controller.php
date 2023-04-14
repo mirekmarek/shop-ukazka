@@ -31,6 +31,9 @@ use JetApplication\Product;
 use JetApplication\Product_Category;
 use JetApplication\Product_Localized;
 
+use JetApplication\Order;
+use JetApplication\Order_Item;
+
 /**
  *
  */
@@ -80,6 +83,9 @@ class Installer_Step_CreateDB_Controller extends Installer_Step_Controller
 			Product::class,
 			Product_Localized::class,
 			Product_Category::class,
+			
+			Order::class,
+			Order_Item::class
 		];
 
 		$result = [];
