@@ -41,4 +41,6 @@ return [
 	'Děkujeme za objednávku' => '',
 	'Vaše objednávka č. <b style="font-size: 1.2rem">%order_no%</b> byla přijata a co nevidět ji začneme zpracovávat.' => '',
 	'Děkujem za vaší důvěru!' => '',
+	'Fakturační adresa' => '',
+	'Dodací adresa' => '',
 ];
