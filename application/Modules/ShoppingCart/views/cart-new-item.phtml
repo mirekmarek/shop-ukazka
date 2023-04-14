@@ -2,6 +2,9 @@
 namespace JetApplicationModule\ShoppingCart;
 
 use Jet\MVC_View;
+use Jet\Tr;
+use Jet\UI;
+use JetApplication\Application_Shop;
 use JetApplication\Currency;
 use JetApplication\ShoppingCart_Item;
 
@@ -21,3 +24,7 @@ $product_localized = $product->getLocalized();
 <img src="<?=$product->getImageMainThb(50, 50)?>">
 <br>
 <?=Currency::format( $product_localized->getPrice()*$new_item->getQty() )?>
+<br>
+<br>
+<?=UI::button(Tr::_('Pokračovat v nákupu'))->setOnClick("$('#cart-popup').modal('hide');")->setClass('info')?>
+<?=UI::button(Tr::_('Objednat'))->setUrl( Application_Shop::getCartPage()->getURL() )->setClass('success')?>

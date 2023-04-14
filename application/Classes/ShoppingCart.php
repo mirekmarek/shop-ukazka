@@ -123,6 +123,10 @@ class ShoppingCart extends BaseObject
 		return $this->items;
 	}
 	
+	public function reset() : void
+	{
+		$this->items = [];
+	}
 	
 	
 }

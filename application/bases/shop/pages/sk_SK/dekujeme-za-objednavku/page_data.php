@@ -1,16 +1,16 @@
 <?php
 return [
-	'id' => 'order',
-	'name' => 'Objednávka',
+	'id' => 'order-finish',
+	'name' => 'Děkujeme za objednávku',
 	'is_active' => true,
 	'SSL_required' => false,
-	'title' => 'Objednávka - doprava a platba',
+	'title' => 'Děkujeme za objednávku',
 	'icon' => '',
-	'menu_title' => 'Objednávka - doprava a platba',
-	'breadcrumb_title' => 'Objednávka - doprava a platba',
+	'menu_title' => 'Děkujeme za objednávku',
+	'breadcrumb_title' => 'Děkujeme za objednávku',
 	'order' => 0,
 	'is_secret' => false,
-	'layout_script_name' => 'order',
+	'layout_script_name' => 'default',
 	'http_headers' => [
 	],
 	'parameters' => [
@@ -21,7 +21,7 @@ return [
 		[
 			'module_name' => 'Order.Form',
 			'controller_name' => 'Main',
-			'controller_action' => 'delivery_and_payment',
+			'controller_action' => 'finish',
 			'parameters' => [
 			],
 			'is_cacheable' => false,

@@ -205,7 +205,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'Firma:',
-		is_required: false,
 		error_messages: [
 		]
 	)]
@@ -219,7 +218,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'Jméno:',
-		is_required: true,
 		error_messages: [
 			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte Vaše jméno'
 		]
@@ -233,7 +231,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'Příjmení:',
-		is_required: true,
 		error_messages: [
 			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte příjmení'
 		]
@@ -247,7 +244,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'Ulice a číslo:',
-		is_required: true,
 		error_messages: [
 			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte adresu'
 		]
@@ -261,7 +257,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'Město / obec:',
-		is_required: true,
 		error_messages: [
 			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte město / obec'
 		]
@@ -275,7 +270,6 @@ class Order extends DataModel {
 	#[Form_Definition(
 		type: Form_Field::TYPE_INPUT,
 		label: 'PSČ:',
-		is_required: true,
 		error_messages: [
 			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte PSČ'
 		]
@@ -602,7 +596,9 @@ class Order extends DataModel {
 	
 	public function setDeliveryMethodCode( string $delivery_method_code ) : void
 	{
-		$this->delivery_method_code = $delivery_method_code;
+		if($this->getDeliveryMethod($delivery_method_code)) {
+			$this->delivery_method_code = $delivery_method_code;
+		}
 	}
 
 	public function getPaymentMethodCode() : string
@@ -612,7 +608,10 @@ class Order extends DataModel {
 
 	public function setPaymentMethodCode( string $payment_method_code ) : void
 	{
-		$this->payment_method_code = $payment_method_code;
+		if($this->getPaymentMethod( $payment_method_code )) {
+			$this->payment_method_code = $payment_method_code;
+		}
+		
 	}
 
 	public function getTotalPrice() : float

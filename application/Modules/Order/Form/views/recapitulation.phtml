@@ -1,9 +1,116 @@
 <?php
 namespace JetApplicationModule\Order\Form;
 
+use Jet\Locale;
 use Jet\MVC_View;
+use Jet\Tr;
+use Jet\UI;
+use Jet\UI_icon;
+use JetApplication\Application_Shop;
+use JetApplication\Currency;
+use JetApplication\Order_Item;
+use JetApplication\Order_Process;
+use JetApplication\Product;
 
 /**
  * @var MVC_View   $this
  */
+
+$order = Order_Process::getCurrentOrder();
+
 ?>
+<h1><?=Tr::_('Rekapitulace objednávky')?></h1>
+
+<table class="table table-striped">
+	<?php foreach($order->getItems() as $item):
+
+		if($item->getType()==Order_Item::ITEM_TYPE_PRODUCT):
+			$product= Product::getActive( $item->getProductId(), $order->getLocale() );
+			$product_localized = $product->getLocalized();
+			?>
+			<tr>
+				<td style="width: 70px;"><img src="<?=$product->getImageMainThb(50, 50)?>" alt="<?=$item->getTitle()?>"></td>
+				<td><?=Locale::int($item->getQty())?>x&nbsp;&nbsp;<a href="<?=$product_localized->getURL()?>"><?=$item->getTitle()?></a></td>
+				<td style="width: 200px;"><?=Currency::format( $item->getTotalPrice() )?></td>
+			</tr>
+			<?php
+		endif;
+		if($item->getType()==Order_Item::ITEM_TYPE_DELIVERY):
+			?>
+			<tr>
+				<td style="width: 70px;"><?=UI::icon('truck')->setSize(UI_icon::SIZE_EXTRA_LARGE)->setTitle(Tr::_('Doprava'))?></td>
+				<td><?=$item->getTitle()?></td>
+				<td style="width: 200px;"><?=Currency::format( $item->getTotalPrice() )?></td>
+			</tr>
+		<?php
+		endif;
+		if($item->getType()==Order_Item::ITEM_TYPE_PAYMENT):
+			?>
+			<tr>
+				<td style="width: 70px;"><?=UI::icon('money-bill-1')->setSize(UI_icon::SIZE_EXTRA_LARGE)->setTitle(Tr::_('Platba'))?></td>
+				<td><?=$item->getTitle()?></td>
+				<td style="width: 200px;"><?=Currency::format( $item->getTotalPrice() )?></td>
+			</tr>
+		<?php
+		endif;
+	endforeach; ?>
+	<tr>
+		<td></td>
+		<td></td>
+		<td><b style="font-size: 1.3rem"><?=Currency::format($order->getTotalPrice())?></b></td>
+	</tr>
+</table>
+
+<h2><?=Tr::_('Kontaktní údaje')?></h2>
+<?=$order->getEmail()?><br>
+<?=$order->getPhone()?>
+<br>
+<br>
+
+<?php if($order->isDifferentDeliveryAddress()): ?>
+	<h2><?=Tr::_('Fakturační adresa')?></h2>
+
+	<?php if($order->getBillingCompanyName()): ?>
+		<?=$order->getBillingCompanyName()?><br>
+		<?=Tr::_('IČO: %id%', ['id'=>$order->getBillingCompanyId()])?><br>
+		<?=Tr::_('DIČ: %id%', ['id'=>$order->getBillingCompanyVatId()])?><br>
+	<?php endif; ?>
+
+	<?=$order->getBillingFirstName()?> <?=$order->getBillingSurname()?><br>
+	<?=$order->getBillingAddressStreetNo()?><br>
+	<?=$order->getBillingAddressZip()?> <?=$order->getBillingAddressTown()?>
+	<br><br>
+
+	<h2><?=Tr::_('Dodací adresa')?></h2>
+	
+	<?php if($order->getDeliveryCompanyName()): ?>
+		<?=$order->getDeliveryCompanyName()?><br>
+	<?php endif; ?>
+	
+	<?=$order->getDeliveryFirstName()?> <?=$order->getDeliverySurname()?><br>
+	<?=$order->getDeliveryAddressStreetNo()?><br>
+	<?=$order->getDeliveryAddressZip()?> <?=$order->getDeliveryAddressTown()?>
+	<br><br>
+
+
+<?php else: ?>
+	<h2><?=Tr::_('Fakturační a dodací adresa')?></h2>
+	
+	<?php if($order->getBillingCompanyName()): ?>
+		<?=$order->getBillingCompanyName()?><br>
+		<?=Tr::_('IČO: %id%', ['id'=>$order->getBillingCompanyId()])?><br>
+		<?=Tr::_('DIČ: %id%', ['id'=>$order->getBillingCompanyVatId()])?><br>
+	<?php endif; ?>
+	
+	<?=$order->getBillingFirstName()?> <?=$order->getBillingSurname()?><br>
+	<?=$order->getBillingAddressStreetNo()?><br>
+	<?=$order->getBillingAddressZip()?> <?=$order->getBillingAddressTown()?>
+	<br><br>
+
+<?php endif; ?>
+
+
+<div class="text-right">
+	<?=UI::button( Tr::_('Dokončit objednávku') )->setUrl( '?finish' )->setClass('success')?>
+</div>
+<br><br>

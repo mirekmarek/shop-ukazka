@@ -1,13 +1,13 @@
 <?php
 return [
 	'id' => 'order-contact',
-	'name' => 'Objednávka - kontakt',
+	'name' => 'Kontakt',
 	'is_active' => true,
 	'SSL_required' => false,
-	'title' => 'Objednávka - kontakt',
+	'title' => 'Kontakt',
 	'icon' => '',
-	'menu_title' => 'Objednávka - kontakt',
-	'breadcrumb_title' => 'Objednávka - kontakt',
+	'menu_title' => 'Kontakt',
+	'breadcrumb_title' => 'Kontakt',
 	'order' => 0,
 	'is_secret' => false,
 	'layout_script_name' => 'order',

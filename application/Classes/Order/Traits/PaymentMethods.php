@@ -10,18 +10,18 @@ trait Order_Traits_PaymentMethods {
 	/**
 	 * @var Order_PaymentMethod_Interface[]
 	 */
-	protected ?array $all_payment_methods;
+	protected ?array $_all_payment_methods = null;
 	
 	/**
 	 * @var Order_PaymentMethod_Interface[]
 	 */
-	protected ?array $active_payment_methods;
+	protected ?array $_active_payment_methods;
 	
 	protected function getPaymentMethods() : void
 	{
-		if($this->all_payment_methods===null) {
-			$this->all_payment_methods = [];
-			$this->active_payment_methods = [];
+		if(!$this->_all_payment_methods) {
+			$this->_all_payment_methods = [];
+			$this->_active_payment_methods = [];
 			
 			foreach( Application_Modules::activatedModulesList() as $module_manifest ) {
 				if(str_starts_with($module_manifest->getName(), static::PAYMENT_MODULE_NAME_PREFIX)) {
@@ -31,10 +31,10 @@ trait Order_Traits_PaymentMethods {
 					$module = Application_Modules::moduleInstance( $module_manifest->getName() );
 					$module->setOrder( $this );
 					
-					$this->all_payment_methods[$module->getCode()] = $module;
+					$this->_all_payment_methods[$module->getCode()] = $module;
 					
 					if($module->isActive()) {
-						$this->active_payment_methods[$module->getCode()] = $module;
+						$this->_active_payment_methods[$module->getCode()] = $module;
 					}
 				}
 			}
@@ -51,8 +51,8 @@ trait Order_Traits_PaymentMethods {
 				return 0;
 			};
 			
-			uasort( $this->all_payment_methods, $sorter );
-			uasort( $this->active_payment_methods, $sorter );}
+			uasort( $this->_all_payment_methods, $sorter );
+			uasort( $this->_active_payment_methods, $sorter );}
 	}
 	
 	/**
@@ -61,7 +61,7 @@ trait Order_Traits_PaymentMethods {
 	public function getAllPaymentMethods() : array
 	{
 		$this->getPaymentMethods();
-		return $this->all_payment_methods;
+		return $this->_all_payment_methods;
 	}
 	
 	/**
@@ -70,17 +70,24 @@ trait Order_Traits_PaymentMethods {
 	public function getActivePaymentMethods() : array
 	{
 		$this->getPaymentMethods();
-		return $this->active_payment_methods;
+		return $this->_active_payment_methods;
 	}
 	
-	public function getPaymentMethod( string $code='' ) : Order_PaymentMethod_Interface
+	public function getActivePaymentMethodCodes() : array
+	{
+		$this->getPaymentMethods();
+		return array_keys($this->_active_payment_methods);
+	}
+	
+	
+	public function getPaymentMethod( string $code='' ) : ?Order_PaymentMethod_Interface
 	{
 		$this->getPaymentMethods();
 		if(!$code) {
 			$code = $this->getPaymentMethodCode();
 		}
 		
-		return $this->all_payment_methods[$code];
+		return $this->_all_payment_methods[$code]??null;
 	}
 	
 	public function getDefaultPaymentMethod() : ?Order_PaymentMethod_Interface

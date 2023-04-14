@@ -1,0 +1,115 @@
+<?php
+namespace JetApplicationModule\Order\Form;
+
+use Jet\Form_Field_RadioButton;
+use Jet\MVC_View;
+use Jet\Tr;
+use JetApplication\Currency;
+use JetApplication\Order_Process;
+
+/**
+ * @var MVC_View   $this
+ * @var Form_Field_RadioButton $delivery_method_input
+ * @var Form_Field_RadioButton $payment_method_input
+ */
+
+$order = Order_Process::getCurrentOrder();
+
+$form = $order->getSelectDeliveryAntPaymentForm();
+
+$delivery_methods = $order->getActiveDeliveryMethods();
+$payment_methods = $order->getActivePaymentMethods();
+
+$delivery_method_input = $form->field('delivery_method');
+$payment_method_input = $form->field('payment_method');
+?>
+
+<?=$form->start()?>
+
+<h2><?=Tr::_('Prosím vyberte způsob dopravy')?></h2>
+
+<?php foreach($delivery_methods as $method):
+	if($method->getCode()==$order->getDeliveryMethodCode()):
+		?>
+		<div class="card bg-info">
+			<div class="card-body">
+				<h5 class="card-title">
+					<input
+						type="radio"
+						value="<?=$method->getCode()?>"
+						name="<?=$delivery_method_input->getName()?>"
+						id="<?=$delivery_method_input->getName()?>_<?=$method->getCode()?>"
+						checked
+					>
+					<label for="<?=$delivery_method_input->getName()?>_<?=$method->getCode()?>"><?=$method->getTitle()?></label>
+				</h5>
+				<span><?=Currency::format( $method->getPrice() )?></span>
+			</div>
+		</div>
+		<br>
+	<?php
+	else:
+		?>
+		<div class="card" onclick="Order.selectDeliveryMethod('<?=$method->getCode()?>')">
+			<div class="card-body">
+				<h5 class="card-title">
+					<input
+						type="radio"
+						value="<?=$method->getCode()?>"
+						name="<?=$delivery_method_input->getName()?>"
+						id="<?=$delivery_method_input->getName()?>_<?=$method->getCode()?>"
+					>
+					<label for="<?=$delivery_method_input->getName()?>_<?=$method->getCode()?>"><?=$method->getTitle()?></label>
+				</h5>
+				<span><?=Currency::format( $method->getPrice() )?></span>
+			</div>
+		</div>
+		<br>
+	<?php
+	endif;
+endforeach; ?>
+
+<h2><?=Tr::_('Prosím vyberte způsob platby')?></h2>
+
+<?php foreach($payment_methods as $method):
+	if($method->getCode()==$order->getPaymentMethodCode()):
+		?>
+		<div class="card bg-info">
+			<div class="card-body">
+				<h5 class="card-title">
+					<input
+						type="radio"
+						value="<?=$method->getCode()?>"
+						name="<?=$payment_method_input->getName()?>"
+						id="<?=$payment_method_input->getName()?>_<?=$method->getCode()?>"
+						checked
+					>
+					<label for="<?=$payment_method_input->getName()?>_<?=$method->getCode()?>"><?=$method->getTitle()?></label>
+				</h5>
+				<span><?=Currency::format( $method->getPrice() )?></span>
+			</div>
+		</div>
+		<br>
+	<?php
+	else:
+		?>
+		<div class="card" onclick="Order.selectPaymentMethod('<?=$method->getCode()?>')">
+			<div class="card-body">
+				<h5 class="card-title">
+					<input
+						type="radio"
+						value="<?=$method->getCode()?>"
+						name="<?=$payment_method_input->getName()?>"
+						id="<?=$payment_method_input->getName()?>_<?=$method->getCode()?>"
+					>
+					<label for="<?=$payment_method_input->getName()?>_<?=$method->getCode()?>"><?=$method->getTitle()?></label>
+				</h5>
+				<span><?=Currency::format( $method->getPrice() )?></span>
+			</div>
+		</div>
+		<br>
+	<?php
+	endif;
+endforeach; ?>
+
+<?=$form->end()?>

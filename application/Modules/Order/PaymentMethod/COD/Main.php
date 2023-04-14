@@ -33,7 +33,7 @@ class Main extends Application_Module implements Order_PaymentMethod_Interface
 	{
 		return match ($this->order->getLocale()->toString()) {
 			'cs_CZ' => 30,
-			'sk_sk' => 1.5,
+			'sk_SK' => 1.5,
 			default => 9999,
 		};
 		

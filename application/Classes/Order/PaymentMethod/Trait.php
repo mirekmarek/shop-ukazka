@@ -24,9 +24,8 @@ trait Order_PaymentMethod_Trait {
 	public function getCode() : string
 	{
 		return substr(
-			0,
-			strlen( Order::PAYMENT_MODULE_NAME_PREFIX ),
-			$this->getModuleManifest()->getName()
+			$this->getModuleManifest()->getName(),
+			strlen( Order::PAYMENT_MODULE_NAME_PREFIX )
 		);
 	}
 	

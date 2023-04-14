@@ -1,16 +1,16 @@
 <?php
 return [
-	'id' => 'order-finish',
-	'name' => 'Objednávka - dokončení',
+	'id' => 'order-contact',
+	'name' => 'Kontakt',
 	'is_active' => true,
 	'SSL_required' => false,
-	'title' => 'Objednávka - dokončení',
+	'title' => 'Kontakt',
 	'icon' => '',
-	'menu_title' => 'Objednávka - dokončení',
-	'breadcrumb_title' => 'Objednávka - dokončení',
+	'menu_title' => 'Kontakt',
+	'breadcrumb_title' => 'Kontakt',
 	'order' => 0,
 	'is_secret' => false,
-	'layout_script_name' => 'default',
+	'layout_script_name' => 'order',
 	'http_headers' => [
 	],
 	'parameters' => [
@@ -21,7 +21,7 @@ return [
 		[
 			'module_name' => 'Order.Form',
 			'controller_name' => 'Main',
-			'controller_action' => 'finish',
+			'controller_action' => 'contact',
 			'parameters' => [
 			],
 			'is_cacheable' => false,

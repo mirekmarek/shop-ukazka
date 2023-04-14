@@ -1,0 +1,40 @@
+<?php
+namespace JetApplicationModule\Order\Form;
+
+use Jet\MVC_View;
+use Jet\Tr;
+use JetApplication\Currency;
+use JetApplication\Order_Process;
+
+/**
+ * @var MVC_View   $this
+ */
+
+$order = Order_Process::getCurrentOrder();
+?>
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title"><?=Tr::_('Přehled objednávky')?></h5>
+		
+		<p class="card-text">
+			<table class="table table">
+			<tr>
+				<td><?=Tr::_('Cena zboží:')?></td>
+				<td><b><?=Currency::format( $order->getProductPrice() )?></b></td>
+			</tr>
+			<tr>
+				<td><?=Tr::_('Doprava:')?></td>
+				<td><b><?=Currency::format( $order->getDeliveryPrice() )?></b></td>
+			</tr>
+			<tr>
+				<td><?=Tr::_('Platba:')?></td>
+				<td><b><?=Currency::format( $order->getPaymentPrice() )?></b></td>
+			</tr>
+			<tr>
+				<td><b style="font-size: 1.3rem"><?=Tr::_('Celkem:')?></b></td>
+				<td><b style="font-size: 1.3rem"><?=Currency::format( $order->getTotalPrice() )?></b></td>
+			</tr>
+			</table>
+		</p>
+	</div>
+</div>

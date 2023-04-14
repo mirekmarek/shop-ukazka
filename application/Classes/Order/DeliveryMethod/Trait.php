@@ -24,9 +24,8 @@ trait Order_DeliveryMethod_Trait {
 	public function getCode() : string
 	{
 		return substr(
-			0,
-			strlen( Order::DELIVERY_MODULE_NAME_PREFIX ),
-			$this->getModuleManifest()->getName()
+			$this->getModuleManifest()->getName(),
+			strlen( Order::DELIVERY_MODULE_NAME_PREFIX )
 		);
 	}
 	

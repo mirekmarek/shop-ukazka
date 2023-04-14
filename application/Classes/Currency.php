@@ -18,8 +18,6 @@ class Currency
 			$locale = Locale::getCurrentLocale();
 		}
 		
-		$formatter = new \NumberFormatter( $locale->toString(), \NumberFormatter::CURRENCY );
-		
-		return $formatter->formatCurrency( $price, static::getCurrencyCode( $locale ) );
+		return $locale->formatCurrency( $price, static::getCurrencyCode( $locale ) );
 	}
 }

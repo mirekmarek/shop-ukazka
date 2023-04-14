@@ -2,8 +2,22 @@
 namespace JetApplicationModule\Order\Form;
 
 use Jet\MVC_View;
+use Jet\Tr;
+use JetApplication\Order_Process;
 
 /**
  * @var MVC_View   $this
  */
+$order = Order_Process::getLastOrder();
 ?>
+<h1><?=Tr::_('Děkujeme za objednávku')?></h1>
+
+<p>
+	<?=Tr::_(
+		'Vaše objednávka č. <b style="font-size: 1.2rem">%order_no%</b> byla přijata a co nevidět ji začneme zpracovávat.',
+		[
+			'order_no' => $order->getId()
+		]
+	)?></p>
+
+<p><?=Tr::_('Děkujem za vaší důvěru!')?></p>

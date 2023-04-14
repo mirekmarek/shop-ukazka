@@ -5,4 +5,5 @@ return [
 	'Objednat' => 'SK Objednat',
 	'Pokračovat v objednávce' => 'SK Pokračovat v objednávce',
 	'Koupit' => 'SK Koupit',
+	'Pokračovat v nákupu' => '',
 ];

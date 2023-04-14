@@ -2,8 +2,44 @@
 namespace JetApplicationModule\Order\Form;
 
 use Jet\MVC_View;
+use Jet\Tr;
+use Jet\UI;
+use JetApplication\Application_Shop;
+use JetApplication\Order_Process;
 
 /**
  * @var MVC_View   $this
  */
+
+$order = Order_Process::getCurrentOrder();
 ?>
+<script>
+	const Order = {
+		request: (action) => {
+			$.ajax({
+				url: action,
+				dataType: 'json'
+			}).then(function (response) {
+				for( let id in response ) {
+					$('#'+id).html( response[id] )
+				}
+			});
+		},
+
+		selectDeliveryMethod: (code) => {
+			Order.request('?select_delivery_method='+code);
+		},
+		selectPaymentMethod: (code) => {
+			Order.request('?select_payment_method='+code);
+		}
+		
+	};
+</script>
+<div id="delivery-end-payment">
+	<?php require 'delivery_and_payment/select.phtml'; ?>
+</div>
+
+<div class="text-right">
+	<?=UI::button( Tr::_('Pokračovat v objednávce') )->setUrl( Application_Shop::getOrderContactPage()->getURL() )->setClass('primary')?>
+</div>
+

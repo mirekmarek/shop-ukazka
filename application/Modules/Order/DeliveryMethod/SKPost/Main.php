@@ -23,7 +23,7 @@ class Main extends Application_Module implements Order_DeliveryMethod_Interface
 	{
 		return match ($this->order->getLocale()->toString()) {
 			'cs_CZ' => false,
-			'sk_sk' => true,
+			'sk_SK' => true,
 			default => false,
 		};
 	}
@@ -37,7 +37,7 @@ class Main extends Application_Module implements Order_DeliveryMethod_Interface
 	{
 		return match ($this->order->getLocale()->toString()) {
 			'cs_CZ' => 9999,
-			'sk_sk' => 4,
+			'sk_SK' => 5,
 			default => 9999,
 		};
 		

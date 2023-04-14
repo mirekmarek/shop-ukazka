@@ -2,8 +2,66 @@
 namespace JetApplicationModule\Order\Form;
 
 use Jet\MVC_View;
+use Jet\Tr;
+use Jet\Form_Renderer;
+use Jet\UI;
+use Jet\UI_button;
+use JetApplication\Order_Process;
 
 /**
  * @var MVC_View   $this
  */
+
+$order = Order_Process::getCurrentOrder();
+$form = $order->getContactForm();
+
+$form->renderer()->setDefaultLabelWidth( [
+	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
+	Form_Renderer::LJ_SIZE_SMALL => 12,
+	Form_Renderer::LJ_SIZE_MEDIUM => 2,
+	Form_Renderer::LJ_SIZE_LARGE => 2
+] );
+
+$form->renderer()->setDefaultFieldWidth( [
+	Form_Renderer::LJ_SIZE_EXTRA_SMALL => 12,
+	Form_Renderer::LJ_SIZE_SMALL => 12,
+	Form_Renderer::LJ_SIZE_MEDIUM => 10,
+	Form_Renderer::LJ_SIZE_LARGE => 8
+] );
+
+$form->field('different_delivery_address')->input()->addJsAction('onchange', "$('#delivery_address').toggle();");
 ?>
+
+<h1><?=Tr::_('Prosím zadejte vaše kontaktní údaje')?></h1>
+<?=$form->start()?>
+	<?=$form->field('phone');?>
+	<?=$form->field('email');?>
+	<hr>
+
+	<?=$form->field('billing_company_name');?>
+	<?=$form->field('billing_company_id');?>
+	<?=$form->field('billing_company_vat_id');?>
+	
+	<?=$form->field('billing_first_name');?>
+	<?=$form->field('billing_surname');?>
+	<?=$form->field('billing_address_street_no');?>
+	<?=$form->field('billing_address_town');?>
+	<?=$form->field('billing_address_zip');?>
+	
+	<?=$form->field('different_delivery_address');?>
+	
+	<div id="delivery_address" style="display: <?=$form->field('different_delivery_address')->getValue()?'block':'none'?>">
+		<?=$form->field('delivery_company_name');?>
+		<?=$form->field('delivery_first_name');?>
+		<?=$form->field('delivery_surname');?>
+		<?=$form->field('delivery_address_street_no');?>
+		<?=$form->field('delivery_address_town');?>
+		<?=$form->field('delivery_address_zip');?>
+	</div>
+
+<div class="text-right">
+	<?=UI::button( Tr::_('Pokračovat v objednávce') )->setClass('primary')->setType(UI_button::TYPE_SUBMIT)?>
+</div>
+
+
+<?=$form->end()?>
