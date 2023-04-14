@@ -43,4 +43,13 @@ class Main extends Application_Module implements Order_DeliveryMethod_Interface
 		
 	}
 	
+	public function getPriority(): int
+	{
+		return 1;
+	}
+	
+	public function isDefault(): bool
+	{
+		return true;
+	}
 }

@@ -14,4 +14,8 @@ interface Order_DeliveryMethod_Interface {
 	public function getPrice() : float;
 	
 	public function getVATRate() : float;
+	
+	public function getPriority() : int;
+	
+	public function isDefault() : bool;
 }

@@ -10,7 +10,7 @@ return [
 	'breadcrumb_title' => 'Objednávka - rekapitulace',
 	'order' => 0,
 	'is_secret' => false,
-	'layout_script_name' => 'default',
+	'layout_script_name' => 'order',
 	'http_headers' => [
 	],
 	'parameters' => [

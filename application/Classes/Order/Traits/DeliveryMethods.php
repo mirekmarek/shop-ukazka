@@ -1,9 +1,10 @@
 <?php
-namespace JetApplication;
+namespace JetApplication\Order\Traits;
 
 use Jet\Application_Modules;
+use JetApplication\Order_DeliveryMethod_Interface;
 
-trait Order_DeliveryMethods {
+trait Order_Traits_DeliveryMethods {
 	const DELIVERY_MODULE_NAME_PREFIX = 'Order.DeliveryMethod.';
 	
 	/**
@@ -37,15 +38,36 @@ trait Order_DeliveryMethods {
 					}
 				}
 			}
+			
+			$sorter = function( Order_DeliveryMethod_Interface $a, Order_DeliveryMethod_Interface $b ) : int
+			{
+				if($a->getPriority()<$b->getPriority()) {
+					return -1;
+				}
+				if($a->getPriority()>$b->getPriority()) {
+					return 1;
+				}
+				
+				return 0;
+			};
+			
+			uasort( $this->all_delivery_methods, $sorter );
+			uasort( $this->active_delivery_methods, $sorter );
 		}
 	}
 	
+	/**
+	 * @return Order_DeliveryMethod_Interface[]
+	 */
 	public function getAllDeliveryMethods() : array
 	{
 		$this->getDeliveryMethods();
 		return $this->all_delivery_methods;
 	}
 	
+	/**
+	 * @return Order_DeliveryMethod_Interface[]
+	 */
 	public function getActiveDeliveryMethods() : array
 	{
 		$this->getDeliveryMethods();
@@ -60,6 +82,17 @@ trait Order_DeliveryMethods {
 		}
 		
 		return $this->all_delivery_methods[$code];
+	}
+	
+	public function getDefaultDeliveryMethod() : ?Order_DeliveryMethod_Interface
+	{
+		foreach($this->getActiveDeliveryMethods() as $method) {
+			if($method->isDefault()) {
+				return $method;
+			}
+		}
+		
+		return null;
 	}
 	
 }

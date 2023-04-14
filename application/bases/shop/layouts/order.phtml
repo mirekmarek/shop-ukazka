@@ -26,16 +26,12 @@ require 'parts/init_libs.php';
 	<jet_module module="UI.Web" action="breadcrumbNavigation" view="default" is_cacheable="true"/>
 
 	<div class="row">
-		<div class="col-md-3">
-			<jet_module module="Catalog.Browser" action="main_menu" is_cacheable="true"/>
-			<jet_layout_position name="left"/>
-		</div>
-		<div class="col-md-7" style="padding-top: 10px;padding-bottom: 20px;">
+		<div class="col-md-10" style="padding-top: 10px;padding-bottom: 20px;">
 			<jet_layout_main_position/>
 		</div>
 		<div class="col-md-2">
 			<div class="well well-small">
-				<jet_module module="ShoppingCart" action="default" is_cacheable="false"/>
+				<jet_module module="Order.Form" action="status" is_cacheable="false"/>
 			</div>
 			<jet_layout_position name="right"/>
 		</div>

@@ -48,4 +48,9 @@ class Controller_Main extends MVC_Controller_Default
 		$this->output('finish');
 	}
 	
+	public function status_Action() : void
+	{
+	
+	}
+	
 }

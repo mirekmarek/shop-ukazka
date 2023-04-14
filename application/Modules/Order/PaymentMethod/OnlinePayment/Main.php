@@ -33,4 +33,15 @@ class Main extends Application_Module implements Order_PaymentMethod_Interface
 		return 0;
 	}
 	
+	
+	public function getPriority(): int
+	{
+		return 1;
+	}
+	
+	public function isDefault(): bool
+	{
+		return true;
+	}
+	
 }

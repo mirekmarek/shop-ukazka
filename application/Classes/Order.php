@@ -5,7 +5,12 @@ use Jet\Data_DateTime;
 use Jet\DataModel;
 use Jet\DataModel_Definition;
 use Jet\DataModel_IDController_AutoIncrement;
+use Jet\Form_Definition;
+use Jet\Form_Field;
 use Jet\Locale;
+use JetApplication\Order\Traits\Order_Traits_DeliveryMethods;
+use JetApplication\Order\Traits\Order_Traits_PaymentMethods;
+use JetApplication\Order\Traits\Order_Traits_Process;
 
 
 #[DataModel_Definition(
@@ -17,8 +22,9 @@ use Jet\Locale;
 	]
 )]
 class Order extends DataModel {
-	use Order_DeliveryMethods;
-	use Order_PaymentMethods;
+	use Order_Traits_DeliveryMethods;
+	use Order_Traits_PaymentMethods;
+	use Order_Traits_Process;
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_ID_AUTOINCREMENT,
@@ -49,6 +55,15 @@ class Order extends DataModel {
 		max_len: 255,
 		is_key: true
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_EMAIL,
+		label: 'e-mail:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte e-mail',
+			Form_Field::ERROR_CODE_INVALID_FORMAT => 'Prosím zadejte platný e-mail'
+		]
+	)]
 	protected string $email = '';
 
 	#[DataModel_Definition(
@@ -56,11 +71,27 @@ class Order extends DataModel {
 		max_len: 255,
 		is_key: true
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Telefon:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte telefon',
+			Form_Field::ERROR_CODE_INVALID_FORMAT => 'Prosím zadejte platný telefon'
+		]
+	)]
 	protected string $phone = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Firma:',
+		is_required: false,
+		error_messages: [
+		]
 	)]
 	protected string $billing_company_name = '';
 
@@ -68,11 +99,25 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 50
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'IČO:',
+		is_required: false,
+		error_messages: [
+		]
+	)]
 	protected string $billing_company_id = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 50
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'DIČ:',
+		is_required: false,
+		error_messages: [
+		]
 	)]
 	protected string $billing_company_vat_id = '';
 
@@ -80,11 +125,27 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Jméno:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte jméno'
+		]
+	)]
 	protected string $billing_first_name = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Příjmení:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte příjmení'
+		]
 	)]
 	protected string $billing_surname = '';
 
@@ -92,17 +153,41 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Ulice a číslo:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte adresu'
+		]
+	)]
 	protected string $billing_address_street_no = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Město / obec:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte město / obec'
+		]
+	)]
 	protected string $billing_address_town = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'PSČ:',
+		is_required: false,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte PSČ'
+		]
 	)]
 	protected string $billing_address_zip = '';
 
@@ -117,6 +202,13 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Firma:',
+		is_required: false,
+		error_messages: [
+		]
+	)]
 	protected string $delivery_company_name = '';
 
 
@@ -124,11 +216,27 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Jméno:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte Vaše jméno'
+		]
+	)]
 	protected string $delivery_first_name = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Příjmení:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte příjmení'
+		]
 	)]
 	protected string $delivery_surname = '';
 
@@ -136,17 +244,41 @@ class Order extends DataModel {
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Ulice a číslo:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte adresu'
+		]
+	)]
 	protected string $delivery_address_street_no = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
 	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'Město / obec:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte město / obec'
+		]
+	)]
 	protected string $delivery_address_town = '';
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 255
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_INPUT,
+		label: 'PSČ:',
+		is_required: true,
+		error_messages: [
+			Form_Field::ERROR_CODE_EMPTY => 'Prosím zadejte PSČ'
+		]
 	)]
 	protected string $delivery_address_zip = '';
 
@@ -164,6 +296,13 @@ class Order extends DataModel {
 
 	#[DataModel_Definition(
 		type: DataModel::TYPE_BOOL
+	)]
+	#[Form_Definition(
+		type: Form_Field::TYPE_CHECKBOX,
+		label: 'Adresa dodání se liší od fakturační adresy',
+		is_required: false,
+		error_messages: [
+		]
 	)]
 	protected bool $different_delivery_address = false;
 
@@ -185,27 +324,7 @@ class Order extends DataModel {
 		is_key: true
 	)]
 	protected string $payment_method_code = '';
-
-	#[DataModel_Definition(
-		type: DataModel::TYPE_FLOAT
-	)]
-	protected float $product_price = 0.0;
-
-	#[DataModel_Definition(
-		type: DataModel::TYPE_FLOAT
-	)]
-	protected float $delivery_price = 0.0;
-
-	#[DataModel_Definition(
-		type: DataModel::TYPE_FLOAT
-	)]
-	protected float $payment_price = 0.0;
-
-	#[DataModel_Definition(
-		type: DataModel::TYPE_FLOAT
-	)]
-	protected float $total_price = 0.0;
-
+	
 	#[DataModel_Definition(
 		type: DataModel::TYPE_STRING,
 		max_len: 100,
@@ -498,22 +617,44 @@ class Order extends DataModel {
 
 	public function getTotalPrice() : float
 	{
-		return $this->total_price;
+		$price = 0;
+		foreach($this->getItems() as $item) {
+			$price+=$item->getTotalPrice();
+		}
+		return $price;
 	}
 	
 	public function getProductPrice() : float
 	{
-		return $this->product_price;
+		$price = 0;
+		foreach($this->getItems() as $item) {
+			if($item->getType()==Order_Item::ITEM_TYPE_PRODUCT) {
+				$price+=$item->getTotalPrice();
+			}
+		}
+		return $price;
 	}
 
 	public function getDeliveryPrice() : float
 	{
-		return $this->delivery_price;
+		$price = 0;
+		foreach($this->getItems() as $item) {
+			if($item->getType()==Order_Item::ITEM_TYPE_DELIVERY) {
+				$price+=$item->getTotalPrice();
+			}
+		}
+		return $price;
 	}
 
 	public function getPaymentPrice() : float
 	{
-		return $this->payment_price;
+		$price = 0;
+		foreach($this->getItems() as $item) {
+			if($item->getType()==Order_Item::ITEM_TYPE_PAYMENT) {
+				$price+=$item->getTotalPrice();
+			}
+		}
+		return $price;
 	}
 
 	/**
@@ -538,37 +679,7 @@ class Order extends DataModel {
 	{
 		$this->status_code = $status_code;
 	}
-
-
-
-
-	public function recalculate() : void
-	{
-
-		$this->total_price = 0.0;
-		$this->product_price = 0.0;
-		$this->delivery_price = 0.0;
-		$this->payment_price = 0.0;
-		
-		foreach( $this->items as $discount_item ) {
-			$price = $discount_item->getTotalPrice();
-
-			$this->total_price += $price;
-
-			switch($discount_item->getType()) {
-				case Order_Item::ITEM_TYPE_PRODUCT:
-					$this->product_price += $price;
-				break;
-				case Order_Item::ITEM_TYPE_PAYMENT:
-					$this->payment_price += $price;
-				break;
-				case Order_Item::ITEM_TYPE_DELIVERY:
-					$this->delivery_price += $price;
-				break;
-			}
-		}
-	}
-
+	
 	
 	public static function get( int $id ) : static|null
 	{
